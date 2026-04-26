@@ -18,10 +18,14 @@ const body = req.body || {};
 const {
 nome,
 telefone,
-data,
-hora,
+data: dataNormalizada,
+hora: horaNormalizada,
 servico
 } = body;
+
+const dataNormalizada = new Date(data).toISOString().split('T')[0];
+const horaNormalizada = hora.padStart(5, '0');
+
 
 if(!nome || !data || !hora){
 

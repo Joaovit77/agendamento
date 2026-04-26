@@ -18,7 +18,13 @@
         <br> <br>
         <input id="hora" type="time" placeholder="Hora">
         <br> <br>
-        <input id="servico" placeholder="Serviço">
+        <label for="servico">Serviço</label>
+        <select id="servico" required>
+            <option value="">Selecione um serviço</option>
+            <option value="Corte">Corte</option>
+            <option value="Barba">Barba</option>
+            <option value="corte + barba">Corte + Barba</option>
+        </select>
         <br> <br>
         <button type="submit">Agendar</button>
     </form>
