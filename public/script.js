@@ -33,6 +33,7 @@ alert("Erro do servidor: " + texto);
 return;
 }
 
-alert(JSON.stringify(resultado));
+alert("Agendamento confirmado com sucesso ✅");
+form.reset();
 
 });
