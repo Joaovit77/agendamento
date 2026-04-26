@@ -22,12 +22,23 @@ const { nome, telefone, data, hora, servico } = body;
 // TESTE 1 - Supabase connection
 console.log("🔎 Consultando conflito...");
 
-const { data: conflito, error: erroSelect } = await supabase
+const { error: erroInsert } = await supabase
 .from('agendamentos')
-.select('*')
-.eq('data', data)
-.eq('hora', hora);
+.insert([
+{
+nome,
+telefone,
+data,
+hora,
+servico
+}
+]);
 
+if(erroInsert){
+return res.status(500).json({
+erro: erroInsert.message
+});
+}
 if (erroSelect) {
 console.log("❌ ERRO SELECT:", erroSelect);
 
