@@ -18,7 +18,7 @@ const { nome, telefone, data, hora, servico } = body;
 
 // SOMENTE INSERT
 const { error } = await supabase
-.from('agendamentos')
+.from('agendamento')
 .insert([
 {
 nome,
