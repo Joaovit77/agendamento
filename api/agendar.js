@@ -23,8 +23,18 @@ hora: horaNormalizada,
 servico
 } = body;
 
-const dataNormalizada = new Date(data).toISOString().split('T')[0];
-const horaNormalizada = hora.padStart(5, '0');
+if (!data || !hora) {
+return res.status(400).json({
+erro: "Data ou hora ausentes"
+});
+}
+
+const dataNormalizada = String(data).trim();
+
+// se vier "8:00", vira "08:00"
+const horaNormalizada = String(hora)
+.trim()
+.padStart(5,'0');
 
 
 if(!nome || !data || !hora){
@@ -35,27 +45,22 @@ erro:"Dados não chegaram na API"
 
 }
 
-const { data: inserted, error } = await supabase
+const { data: conflito, error: erroConflito } = await supabase
 .from('agendamentos')
-.insert([
-{
-nome,
-telefone,
-data,
-hora,
-servico
-}
-])
-.select();
+.select('*')
+.eq('data', dataNormalizada)
+.eq('hora', horaNormalizada);
 
-if(error){
-
-console.log("ERRO SUPABASE:", error);
-
+if (erroConflito) {
 return res.status(500).json({
-erro:error.message
+erro: erroConflito.message
 });
+}
 
+if (conflito.length > 0) {
+return res.status(400).json({
+erro:'Horário ocupado'
+});
 }
 
 console.log("INSERIDO:", inserted);
