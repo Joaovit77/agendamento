@@ -9,22 +9,19 @@ module.exports = async (req, res) => {
 
 try {
 
+console.log("🔥 API FOI CHAMADA");
+
 const body = typeof req.body === "string"
 ? JSON.parse(req.body)
 : req.body;
 
-console.log("BODY:", body);
+console.log("📦 BODY RECEBIDO:", body);
 
 const { nome, telefone, data, hora, servico } = body;
 
-// validação básica
-if (!nome || !data || !hora) {
-return res.status(400).json({
-erro: "Dados incompletos"
-});
-}
+// TESTE 1 - Supabase connection
+console.log("🔎 Consultando conflito...");
 
-// conflito
 const { data: conflito, error: erroSelect } = await supabase
 .from('agendamentos')
 .select('*')
@@ -32,17 +29,19 @@ const { data: conflito, error: erroSelect } = await supabase
 .eq('hora', hora);
 
 if (erroSelect) {
-console.log(erroSelect);
-return res.status(500).json({ erro: erroSelect.message });
-}
+console.log("❌ ERRO SELECT:", erroSelect);
 
-if (conflito.length > 0) {
-return res.status(400).json({
-erro: 'Horário ocupado'
+return res.status(500).json({
+erro: "Erro no SELECT",
+detalhe: erroSelect.message
 });
 }
 
-// insert
+console.log("✔ conflito:", conflito);
+
+// TESTE 2 - INSERT
+console.log("💾 Inserindo...");
+
 const { error: erroInsert } = await supabase
 .from('agendamentos')
 .insert([
@@ -50,18 +49,24 @@ const { error: erroInsert } = await supabase
 ]);
 
 if (erroInsert) {
-console.log(erroInsert);
-return res.status(500).json({ erro: erroInsert.message });
+console.log("❌ ERRO INSERT:", erroInsert);
+
+return res.status(500).json({
+erro: "Erro no INSERT",
+detalhe: erroInsert.message
+});
 }
 
-return res.status(200).json({
+console.log("✔ SALVO COM SUCESSO");
+
+return res.json({
 ok: true,
 mensagem: "Agendamento criado"
 });
 
 } catch (err) {
 
-console.log("ERRO GERAL:", err);
+console.log("💥 ERRO GERAL:", err);
 
 return res.status(500).json({
 erro: "Erro interno",
