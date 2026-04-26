@@ -2,7 +2,7 @@ const form = document.getElementById('formulario');
 
 form.addEventListener('submit', async function(e){ 
     e.preventDefault();
-
+    console.log("BOTÃO FOI CLICADO");
     const dados = {
         nome: document.getElementById('nome').value,
         telefone: document.getElementById('telefone').value,
