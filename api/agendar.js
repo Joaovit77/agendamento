@@ -5,24 +5,19 @@ process.env.SUPABASE_URL,
 process.env.SUPABASE_KEY
 );
 
-module.exports = async (req, res) => {
+module.exports = async (req,res)=>{
 
-try {
-
-console.log("🔥 API FOI CHAMADA");
+try{
 
 const body = typeof req.body === "string"
 ? JSON.parse(req.body)
 : req.body;
 
-console.log("📦 BODY RECEBIDO:", body);
-
 const { nome, telefone, data, hora, servico } = body;
 
-// TESTE 1 - Supabase connection
-console.log("🔎 Consultando conflito...");
 
-const { error: erroInsert } = await supabase
+// SOMENTE INSERT
+const { error } = await supabase
 .from('agendamentos')
 .insert([
 {
@@ -34,54 +29,23 @@ servico
 }
 ]);
 
-if(erroInsert){
-return res.status(500).json({
-erro: erroInsert.message
-});
-}
-if (erroSelect) {
-console.log("❌ ERRO SELECT:", erroSelect);
+if(error){
 
 return res.status(500).json({
-erro: "Erro no SELECT",
-detalhe: erroSelect.message
+erro:error.message
 });
+
 }
-
-console.log("✔ conflito:", conflito);
-
-// TESTE 2 - INSERT
-console.log("💾 Inserindo...");
-
-const { error: erroInsert } = await supabase
-.from('agendamentos')
-.insert([
-{ nome, telefone, data, hora, servico }
-]);
-
-if (erroInsert) {
-console.log("❌ ERRO INSERT:", erroInsert);
-
-return res.status(500).json({
-erro: "Erro no INSERT",
-detalhe: erroInsert.message
-});
-}
-
-console.log("✔ SALVO COM SUCESSO");
 
 return res.json({
-ok: true,
-mensagem: "Agendamento criado"
+ok:true,
+mensagem:"Salvou"
 });
 
-} catch (err) {
-
-console.log("💥 ERRO GERAL:", err);
+}catch(err){
 
 return res.status(500).json({
-erro: "Erro interno",
-detalhe: err.message
+erro:err.message
 });
 
 }
