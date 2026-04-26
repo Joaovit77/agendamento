@@ -16,17 +16,34 @@
         <br> <br>
         <input id="data" type="date" placeholder="Data">
         <br> <br>
-        <input id="hora" type="time" placeholder="Hora">
+      <label for="hora">Horário</label>
+
+    <select id="hora" required>
+
+        <option value="">Selecione um horário</option>
+
+        <option value="08:00">08:00</option>
+        <option value="09:00">09:00</option>
+        <option value="10:00">10:00</option>
+        <option value="11:00">11:00</option>
+        <option value="13:00">13:00</option>
+        <option value="14:00">14:00</option>
+        <option value="15:00">15:00</option>
+        <option value="16:00">16:00</option>
+        <option value="17:00">17:00</option>
+
+    </select>
+
         <br> <br>
         <label for="servico">Serviço</label>
-        <select id="servico" required>
-            <option value="">Selecione um serviço</option>
-            <option value="Corte">Corte</option>
-            <option value="Barba">Barba</option>
-            <option value="corte + barba">Corte + Barba</option>
-        </select>
-        <br> <br>
-        <button type="submit">Agendar</button>
+    <select id="servico" required>
+        <option value="">Selecione um serviço</option>
+        <option value="Corte">Corte</option>
+        <option value="Barba">Barba</option>
+        <option value="corte + barba">Corte + Barba</option>
+    </select>
+    <br> <br>
+    <button type="submit">Agendar</button>
     </form>
     </main>
 
