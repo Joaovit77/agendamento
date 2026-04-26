@@ -10,7 +10,7 @@ form.addEventListener('submit', async function(e){
         servico: document.getElementById('servico').value
     };
 
-    const reposta = await fetch('api/agendar', {
+    const reposta = await fetch('api/agendar.js', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -22,6 +22,6 @@ form.addEventListener('submit', async function(e){
     console.log(resultado);
 
     alert(JSON.stringify(resultado));
-    
+
 
 });
