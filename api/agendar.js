@@ -9,32 +9,15 @@ module.exports = async (req,res)=>{
 
 try{
 
-console.log("FUNÇÃO INICIOU");
-
-console.log("req.body:", req.body);
-
 const body = req.body || {};
 
 const {
 nome,
 telefone,
-data: dataNormalizada,
-hora: horaNormalizada,
+data,
+hora,
 servico
 } = body;
-
-if (!data || !hora) {
-return res.status(400).json({
-erro: "Data ou hora ausentes"
-});
-}
-
-const dataNormalizada = String(data).trim();
-
-// se vier "8:00", vira "08:00"
-const horaNormalizada = String(hora)
-.trim()
-.padStart(5,'0');
 
 
 if(!nome || !data || !hora){
@@ -45,25 +28,64 @@ erro:"Dados não chegaram na API"
 
 }
 
+
+// padroniza
+const dataNormalizada = String(data).trim();
+
+const horaNormalizada = String(hora)
+.trim()
+.padStart(5,'0');
+
+
+// verifica conflito
 const { data: conflito, error: erroConflito } = await supabase
 .from('agendamentos')
 .select('*')
 .eq('data', dataNormalizada)
 .eq('hora', horaNormalizada);
 
-if (erroConflito) {
+
+if(erroConflito){
+
 return res.status(500).json({
 erro: erroConflito.message
 });
+
 }
 
-if (conflito.length > 0) {
+
+if(conflito.length > 0){
+
 return res.status(400).json({
 erro:'Horário ocupado'
 });
+
 }
 
-console.log("INSERIDO:", inserted);
+
+// INSERT (isso tinha sumido do seu código!)
+const { data: inserted, error } = await supabase
+.from('agendamentos')
+.insert([
+{
+nome,
+telefone,
+data: dataNormalizada,
+hora: horaNormalizada,
+servico
+}
+])
+.select();
+
+
+if(error){
+
+return res.status(500).json({
+erro:error.message
+});
+
+}
+
 
 return res.json({
 ok:true,
@@ -72,8 +94,6 @@ dados: inserted
 });
 
 }catch(err){
-
-console.log("ERRO GERAL:", err);
 
 return res.status(500).json({
 erro: err.message
