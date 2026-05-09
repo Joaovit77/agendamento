@@ -1,8 +1,9 @@
-export const dynamic = 'force-dynamic'
+
 
 import { NextResponse } from 'next/server'
 import { getSupabase } from '@/lib/supabase'
 
+export const dynamic = 'force-dynamic'
 export async function GET() {
   const [servicesRes, barbersRes] = await Promise.all([
     getSupabase().from('services').select('*').eq('active', true).order('price'),
