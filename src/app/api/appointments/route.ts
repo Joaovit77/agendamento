@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic'
+
+
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { sendConfirmationWhatsApp } from '@/lib/whatsapp'
